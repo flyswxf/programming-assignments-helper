@@ -1,0 +1,4 @@
+在运行这段代码之前，你需要先手动启动Edge浏览器，并添加--remote-debugging-port=9222参数。你可以通过以下命令来启动Edge浏览器：
+
+"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --remote-debugging-port=9222 --user-data-dir="C:\selenum\AutomationProfile"
+然后，你可以手动登录网站。当你运行这段代码时，Selenium会连接到已经打开的浏览器会话，然后你可以通过Selenium来控制这个浏览器会话。
