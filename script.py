@@ -7,9 +7,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
-from tools.vis_contest import vis_contest
-from tools.vis_perplex import vis_perplex
-from tools.input_contest import input_contest
+from tools.vis_contest import visit
+# from tools.vis_perplex import query
+from tools.input_contest import submit
+from tools.vis_gpt import query
 
 import argparse
 import time
@@ -20,8 +21,8 @@ import sys
 # 创建解析器
 parser = argparse.ArgumentParser()
 parser.add_argument('--mode', default='run', help='Mode to run the script. run or test')
-parser.add_argument('--step',default='vis',help='Step to run.visit, query or submit.')
-parser.add_argument('--cmd',default='auto',help='whether to run cmd in python. auto or manual')
+parser.add_argument('--step',default='visit',help='Step to run.visit, query or submit.')
+parser.add_argument('--cmd',default='manual',help='whether to run cmd in python. auto or manual')
 
 # 解析参数
 args = parser.parse_args()
@@ -64,7 +65,7 @@ if mode == 'run':
 
         # 执行vis-contest.py
         print('visit contest')
-        vis_contest(url, driver, wait)
+        visit(url, driver, wait)
         time.sleep(2)
 
         # 设置重试次数
@@ -73,12 +74,12 @@ if mode == 'run':
         for i in range(retry_times):
             # 执行vis-perplex.py
             print('visit perplexity')
-            vis_perplex(driver, wait)
+            query(driver, wait)
             time.sleep(2)
 
             # 执行input-contest.py
             print('submit answer')
-            result = input_contest(url, driver, wait)
+            result = submit(url, driver, wait)
             time.sleep(2)
 
             if result == 'Accepted':
@@ -97,7 +98,7 @@ elif mode == 'test':
     if step == 'visit':
         # 执行vis-contest.py
         print('visit contest')
-        vis_contest(url, driver, wait)
+        visit(url, driver, wait)
         time.sleep(2)
         with open('log/query.txt','r',encoding='utf-8') as f:
             query = f.read().strip()
@@ -105,14 +106,18 @@ elif mode == 'test':
 
     elif step == 'query':
         # 执行vis-perplex.py
-        print('visit perplexity')
-        vis_perplex(driver, wait)
+        print('visit ai')
+        query(driver, wait)
         time.sleep(2)
-    else:
+
+    elif step == 'submit':
         # 执行input-contest.py
         print('submit answer')
-        result = input_contest(url, driver, wait)
+        result = submit(url, driver, wait)
         time.sleep(2)
+
+    else:
+        print('no step named ' + step)
 
 else:
     print('no mode named ' + mode)

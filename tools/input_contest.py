@@ -9,7 +9,7 @@ from selenium.common.exceptions import TimeoutException
 import pyperclip
 import time
 
-def input_contest(url, driver, wait):
+def submit(url, driver, wait):
     # 访问指定的网址
     driver.get(url)
     print(driver.title)
@@ -39,16 +39,26 @@ def input_contest(url, driver, wait):
     # 找到提交按钮元素
     submit_button = driver.find_element(By.XPATH,'/html/body/div[2]/div[1]/div[2]/div[1]/form/div[2]/div[2]/button')
 
+    # 使用JavaScript将浏览器滚动到提交按钮元素
+    driver.execute_script("arguments[0].scrollIntoView();", submit_button)
+    # 使用JavaScript将浏览器向下滚动200像素
+    driver.execute_script("window.scrollBy(0, -200);")
+
     # 点击提交按钮
     submit_button.click()
     print('successfully submitted')
 
     try:
         wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/div[1]/div[2]/div[1]/div[6]/table/tbody/tr[1]/td[5]/h5')))
-        element = driver.find_element(By.XPATH,'/html/body/div[2]/div[1]/div[2]/div[1]/div[6]/table/tbody/tr[1]/td[5]/h5')
+        while True:
+            element = driver.find_element(By.XPATH,'/html/body/div[2]/div[1]/div[2]/div[1]/div[6]/table/tbody/tr[1]/td[5]/h5')
+            if element.text != 'In queue':
+                break
+            time.sleep(1)
 
         # 检查元素的文本内容
         with open('log/submitted.txt', 'w', encoding='utf-8') as f:
+            # print(element.text)
             if element.text == 'Accepted':
                 print('Accepted')
                 f.write(url + ' : ' + 'Accepted')

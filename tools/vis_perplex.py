@@ -10,12 +10,12 @@ import pyperclip
 import time
 import sys
 
-def vis_perplex(driver, wait):
+def query(driver, wait):
     # 让浏览器打开perplexity首页
     driver.get("https://www.perplexity.ai/")
 
     # 设置重试次数
-    retry_times = 1
+    retry_times = 3
 
     for i in range(retry_times):
         try:
@@ -33,8 +33,9 @@ def vis_perplex(driver, wait):
         query = f.read().strip()
 
     # 输入搜索内容并提交
-    pref="用c++实现代码:"
-    elem.send_keys(pref + query + Keys.RETURN)
+    pref="用c++实现代码: "
+    suff = ' 请在每一个case与答案之间换行' if 'case' in query else ''
+    elem.send_keys(pref + query + suff + Keys.RETURN)
     print('query is sent')
 
     # 等待搜索结果出现
@@ -59,7 +60,7 @@ def vis_perplex(driver, wait):
             time.sleep(2)
 
             if i < retry_times - 1:  # 如果不是最后一次重试，那么继续重试
-                print(f'第{i+1}次retry失败,总共{retry_times}次')
+                print(f'第{i+1}次尝试失败,总共{retry_times}次')
 
             else:  # 如果是最后一次重试，那么执行备用方案
                 # 等待复制按钮出现并点击
