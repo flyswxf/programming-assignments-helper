@@ -44,6 +44,8 @@ def submit(url, driver, wait):
     # 使用JavaScript将浏览器向下滚动200像素
     driver.execute_script("window.scrollBy(0, -200);")
 
+    time.sleep(2)
+
     # 点击提交按钮
     submit_button.click()
     print('successfully submitted')
