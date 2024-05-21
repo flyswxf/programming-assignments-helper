@@ -12,8 +12,6 @@ import sys
 import subprocess
 import requests
 
-
-
 cmd = '"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe" --remote-debugging-port=9222 --user-data-dir="C:\\selenum\\AutomationProfile"'
 
 # 使用subprocess模块运行命令
