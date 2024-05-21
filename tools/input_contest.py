@@ -34,7 +34,7 @@ def submit(url, driver, wait):
     text_box.send_keys(Keys.CONTROL + 'v')
 
     # 等待一段时间以确保内容已经输入
-    time.sleep(2)
+    # time.sleep(2)
 
     # 找到提交按钮元素
     submit_button = driver.find_element(By.XPATH,'/html/body/div[2]/div[1]/div[2]/div[1]/form/div[2]/div[2]/button')
@@ -43,6 +43,8 @@ def submit(url, driver, wait):
     driver.execute_script("arguments[0].scrollIntoView();", submit_button)
     # 使用JavaScript将浏览器向下滚动200像素
     driver.execute_script("window.scrollBy(0, -200);")
+
+    # time.sleep(2)
 
     # 点击提交按钮
     submit_button.click()

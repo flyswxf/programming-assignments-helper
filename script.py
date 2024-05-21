@@ -22,7 +22,7 @@ import sys
 parser = argparse.ArgumentParser()
 parser.add_argument('--mode', default='run', help='Mode to run the script. run or test')
 parser.add_argument('--step',default='visit',help='Step to run.visit, query or submit.')
-parser.add_argument('--cmd',default='manual',help='whether to run cmd in python. auto or manual')
+parser.add_argument('--cmd',default='auto',help='whether to run cmd in python. auto or manual')
 
 # 解析参数
 args = parser.parse_args()
@@ -40,6 +40,7 @@ if cmd_status == 'auto':
 
 # 启动Edge浏览器时，添加远程调试端口参数
 edge_options = Options()
+# options.add_argument("--headless")
 edge_options.add_experimental_option("debuggerAddress", "localhost:9222")
 
 # 尝试连接到浏览器，如果失败则等待一段时间后重试

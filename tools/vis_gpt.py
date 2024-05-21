@@ -11,8 +11,26 @@ import time
 import sys
 
 def query(driver, wait):
-    # 让浏览器打开perplexity首页
-    driver.get("https://chatgpt.com/")
+    target_url = "https://chatgpt.com/"
+    found = False
+
+    # 遍历所有打开的页面
+    for window_handle in driver.window_handles:
+        # 切换到该页面
+        driver.switch_to.window(window_handle)
+        # 检查URL是否与你想要的相等
+        if driver.current_url == target_url:
+            found = True
+            print('found chatgpt')
+            break
+
+    # 如果没有找到，创建新的页面
+    if not found:
+        print('open chatgpt, you have 20 seconds to pass the robot test')
+        driver.execute_script("window.open('" + target_url + "');")
+        # 切换到新的页面
+        driver.switch_to.window(driver.window_handles[-1])
+        time.sleep(20)
 
     # 设置重试次数
     retry_times = 3
@@ -20,7 +38,7 @@ def query(driver, wait):
     for i in range(retry_times):
         try:
             # 等待搜索框变为可交互状态
-            elem = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[1]/div/main/div[1]/div[2]/div[1]/div/form/div/div[2]/div/div/div[2]/textarea")))
+            elem = wait.until(EC.element_to_be_clickable((By.TAG_NAME, 'textarea')))
         except Exception:
             print('cant visit chatgpt')
             print(f'retry {i+1}:')
@@ -47,15 +65,16 @@ def query(driver, wait):
     for i in range(retry_times):
         try:
             print('wait for code')
-            time.sleep(20)
+            # time.sleep(20)
             # raise Exception("Force jump to exception")
-            # wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[3]/div/div/div[2]/div/div[2]')))
+            wait.until(EC.presence_of_all_elements_located((By.TAG_NAME, 'ol')))
+            # wait.until(EC.visibility_of_all_elements_located((By.TAG_NAME, 'code')))
             
             code_element = driver.find_element(By.TAG_NAME,'code')
             content = code_element.text
             print("get content from code")
             break
-        except Exception:
+        except TimeoutException:
             # 需修改,无法点击copy_botton
             # 原因是屏幕没有移动到copy按钮的位置
             print('page refresh')
@@ -74,6 +93,7 @@ def query(driver, wait):
                 wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[1]/div/main/div[1]/div[1]/div/div/div/div/div[5]/div/div/div[2]/div/div[1]/div/div/div/pre/div/div[1]/div/span/button')))
                 copy_button = driver.find_element(By.XPATH,'/html/body/div[1]/div[1]/div/main/div[1]/div[1]/div/div/div/div/div[5]/div/div/div[2]/div/div[1]/div/div/div/pre/div/div[1]/div/span/button')
                 
+                driver.execute_script("arguments[0].scrollIntoView();", copy_button)
                 copy_button.click()
                 # driver.execute_script("arguments[0].click();", copy_button)
 
