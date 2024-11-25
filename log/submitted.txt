@@ -1,1 +1,8 @@
-https://acm.ecnu.edu.cn/contest/774/problem/1003/ : Accepted
+https://acm.ecnu.edu.cn/problem/20/ : Wrong answer
+https://acm.ecnu.edu.cn/problem/20/ : Wrong answer
+https://acm.ecnu.edu.cn/problem/20/ : Compilation error
+https://acm.ecnu.edu.cn/problem/21/ : Wrong answer
+https://acm.ecnu.edu.cn/problem/21/ : Wrong answer
+https://acm.ecnu.edu.cn/problem/21/ : Wrong answer
+https://acm.ecnu.edu.cn/problem/22/ : Compilation error
+https://acm.ecnu.edu.cn/problem/22/ : Compilation error

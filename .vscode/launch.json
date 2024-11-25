@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python 调试程序: 包含参数的当前文件",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": "${command:pickArgs}"//${command:pickArgs} 是 Visual Studio Code 中的一种特殊语法，用于在启动调试配置时动态获取参数。
+                                        //它会弹出一个输入框，允许用户在启动调试会话之前输入参数。
+        }
+    ]
+}

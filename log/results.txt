@@ -1,1 +1,87 @@
-dp
+#include <iostream>
+#include <string>
+#include <cassert>
+
+using namespace std;
+
+typedef long long ll;
+
+ll findMaxSpecialNumber(ll n, int x) {
+    string str_n = to_string(n);
+    int len = str_n.length();
+    string result = "";
+    int zerosAndOnes = 0;
+
+    for (int i = 0; i < len; ++i) {
+        // 尝试在当前位置放置大于当前数字的数
+        for (char c = str_n[i] + 1; c <= '9'; ++c) {
+            if (zerosAndOnes + (c == '0' || c == '1') <= x) {
+                int remainingZerosOnes = x - zerosAndOnes - (c == '0' || c == '1');
+                if (remainingZerosOnes <= len - i - 1) {
+                    result += c;
+                    zerosAndOnes += (c == '0' || c == '1');
+                    break;
+                }
+            }
+        }
+
+        // 如果已经找到了一个合适的数，则跳出内层循环
+        if (result.length() > i) {
+            continue;
+        }
+
+        // 尝试在当前位置放置等于当前数字的数
+        for (char c = str_n[i]; c >= '0'; --c) {
+            int newZerosOnes = zerosAndOnes + (c == '0' || c == '1');
+            if (newZerosOnes <= x) {
+                int remainingZerosOnes = x - newZerosOnes;
+                if (remainingZerosOnes <= len - i - 1) {
+                    result += c;
+                    zerosAndOnes = newZerosOnes;
+                    break;
+                }
+            }
+        }
+    }
+
+    // 如果还没有达到 x，则填充剩余的 0 和 1
+    int remaining = x - zerosAndOnes;
+    result += string(remaining, '0'); // 先填充 0
+    zerosAndOnes += remaining;
+
+    // 剩余的位置填充 9
+    int remainingLength = len - result.length();
+    result += string(remainingLength, '9');
+
+    // 如果结果超过了 n，则回溯修正
+    if (stoll(result) > n) {
+        result.back()--; // 减少最后一个数字
+        zerosAndOnes--;
+        result += '0'; // 添加一个 0
+    }
+
+    // 确保结果是有效的
+    while (zerosAndOnes < x) {
+        size_t pos = result.find_last_of("1");
+        if (pos != string::npos) {
+            result[pos] = '0';
+            result += "1";
+            zerosAndOnes++;
+        } else {
+            // 如果没有 1，则无法构造
+            return -1;
+        }
+    }
+
+    return stoll(result);
+}
+
+int main() {
+    ll n;
+    int x;
+    cin >> n >> x;
+
+    cout << findMaxSpecialNumber(n, x) << endl;
+
+    return 0;
+}
