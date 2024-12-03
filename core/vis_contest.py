@@ -10,20 +10,20 @@ from tools.txt_process import make_query
 
 import sys
 
+
 def visit(url, driver, wait):
-    try_to_find_site(driver,wait,url)
-    
-    
+    try_to_find_site(driver, wait, url)
+
     info_or_limited = wait.until(
         EC.any_of(
-            EC.visibility_of_element_located((By.CLASS_NAME, 'problem-body')),
-            EC.visibility_of_element_located((By.CLASS_NAME, 'ui.grey.header'))
+            EC.visibility_of_element_located((By.CLASS_NAME, "problem-body")),
+            EC.visibility_of_element_located((By.CLASS_NAME, "ui.grey.header")),
         )
     )
     print(driver.title)
-    
-    if info_or_limited.get_attribute('class') == 'ui grey header':
-        print('This problem is not accessible. Turning to the next problem...')
+
+    if info_or_limited.get_attribute("class") == "ui grey header":
+        print("This problem is not accessible. Turning to the next problem...")
         driver.close()
         driver.switch_to.window(driver.window_handles[-1])
         return False
@@ -33,6 +33,6 @@ def visit(url, driver, wait):
     # examples = driver.find_elements(By.CLASS_NAME, "example")
 
     # 创建或打开result.txt文件，并写入文本
-    make_query(url,driver,wait,paragraphs)
+    make_query(url, driver, wait, paragraphs)
     # driver.quit()
     return True

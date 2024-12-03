@@ -7,7 +7,11 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 
 # 创建一个新的Edge浏览器实例
-driver = webdriver.Edge(service=Service('D://HuaweiMoveData//Users//fengl//Desktop//code//basic script//driver//msedgedriver.exe'))
+driver = webdriver.Edge(
+    service=Service(
+        "D://HuaweiMoveData//Users//fengl//Desktop//code//basic script//driver//msedgedriver.exe"
+    )
+)
 # 让浏览器打开Google首页
 driver.get("http://www.baidu.com")
 
@@ -23,17 +27,19 @@ elem.send_keys("Hello World" + Keys.RETURN)
 
 # 等待搜索结果出现
 wait = WebDriverWait(driver, 10)
-results = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.result.c-container')))
+results = wait.until(
+    EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div.result.c-container"))
+)
 
 # 打开一个文件用于写入搜索结果
-with open('results.txt', 'w', encoding='utf-8') as f:
+with open("results.txt", "w", encoding="utf-8") as f:
     # 遍历搜索结果
     for result in results:
         # 获取并写入标题和URL
-        title = result.find_element(By.CSS_SELECTOR, 'h3.t').text
-        url = result.find_element(By.CSS_SELECTOR, 'h3.t a').get_attribute('href')
-        f.write(f'Title: {title}\nURL: {url}\n\n')
+        title = result.find_element(By.CSS_SELECTOR, "h3.t").text
+        url = result.find_element(By.CSS_SELECTOR, "h3.t a").get_attribute("href")
+        f.write(f"Title: {title}\nURL: {url}\n\n")
 
 # 关闭浏览器
-print('Search results written to results.txt')
+print("Search results written to results.txt")
 driver.quit()

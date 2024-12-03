@@ -20,7 +20,12 @@ cmd = '"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe" --rem
 edge_options = Options()
 edge_options.add_experimental_option("debuggerAddress", "localhost:9222")
 
-driver = webdriver.Edge(service=Service('D://HuaweiMoveData//Users//fengl//Desktop//code//basic script//driver//msedgedriver.exe'), options=edge_options)
+driver = webdriver.Edge(
+    service=Service(
+        "D://HuaweiMoveData//Users//fengl//Desktop//code//basic script//driver//msedgedriver.exe"
+    ),
+    options=edge_options,
+)
 wait = WebDriverWait(driver, 20)
 
 url = "https://www.51jiaoxi.com/doc-15664684.html"
@@ -28,12 +33,12 @@ url = "https://www.51jiaoxi.com/doc-15664684.html"
 driver.get(url)
 
 # 等待页面加载完毕，这里使用的是等待body元素出现
-WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
+WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
 
 
 def get_text():
     # 获取特定XPath下的元素
-    element = driver.find_element(By.XPATH,"/html/body/div[3]/div[1]/div[1]/div[3]")
+    element = driver.find_element(By.XPATH, "/html/body/div[3]/div[1]/div[1]/div[3]")
 
     # 在该元素中找到所有的p元素
     paragraphs = element.find_elements(By.TAG_NAME, "p")
@@ -41,14 +46,15 @@ def get_text():
     with open("log/info.txt", "w", encoding="utf-8") as file:
         for paragraph in paragraphs:
             text = paragraph.text
-            file.write(text + '\n')
+            file.write(text + "\n")
 
-    print('writing to info.txt')
-
+    print("writing to info.txt")
 
 
 def get_image():
-    element = driver.find_element(By.XPATH,"/html/body/div[3]/div[2]/div[1]/div[2]/main/div[1]")
+    element = driver.find_element(
+        By.XPATH, "/html/body/div[3]/div[2]/div[1]/div[2]/main/div[1]"
+    )
     # 在该元素中找到所有的img元素
     images = element.find_elements(By.TAG_NAME, "img")
 
@@ -57,9 +63,10 @@ def get_image():
         src = image.get_attribute("src")
         # 下载图片
         response = requests.get(src)
-        with open(f"log/image/image{index}.png", 'wb') as f:
+        with open(f"log/image/image{index}.png", "wb") as f:
             f.write(response.content)
 
-    print('writing images')
+    print("writing images")
+
 
 get_image()

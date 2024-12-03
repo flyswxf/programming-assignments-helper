@@ -10,11 +10,16 @@ import pyperclip
 import time
 import re
 
-def check_login_status(driver:webdriver.Edge,wait:WebDriverWait,url="https://acm.ecnu.edu.cn/problem/list/"):
+
+def check_login_status(
+    driver: webdriver.Edge,
+    wait: WebDriverWait,
+    url="https://acm.ecnu.edu.cn/problem/list/",
+):
     # 检查是否已经执行过了
-    if getattr(check_login_status, 'has_run', False):
+    if getattr(check_login_status, "has_run", False):
         return
-    
+
     # 切换到新标签页
     driver.execute_script("window.open(arguments[0], '_blank');", url)
     driver.switch_to.window(driver.window_handles[-1])
@@ -24,12 +29,14 @@ def check_login_status(driver:webdriver.Edge,wait:WebDriverWait,url="https://acm
     try:
         element = wait.until(
             EC.any_of(
-                EC.visibility_of_element_located((By.CLASS_NAME, 'ui.primary.button')),
-                EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div[1]/div[2]/div/div[1]'))
+                EC.visibility_of_element_located((By.CLASS_NAME, "ui.primary.button")),
+                EC.visibility_of_element_located(
+                    (By.XPATH, "/html/body/div[1]/div[1]/div[2]/div/div[1]")
+                )
                 # 有待修改
             )
         )
-        key=element.text
+        key = element.text
 
     except TimeoutException:
         print("Neither element was found within the given time.")
@@ -46,28 +53,29 @@ def check_login_status(driver:webdriver.Edge,wait:WebDriverWait,url="https://acm
         print("press 'c' to continue, press 'q' to quit")
         while True:
             user_input = input("Enter your choice: ").strip().lower()
-            if user_input == 'c':
+            if user_input == "c":
                 print("Continuing...")
                 break
-            elif user_input == 'q':
+            elif user_input == "q":
                 print("Quitting...")
                 exit()
             else:
                 print("Invalid input. Please press 'c' to continue or 'q' to quit.")
     else:
         print("you have already logined in")
-    
-    check_login_status.has_run=True
+
+    check_login_status.has_run = True
+
 
 check_login_status.has_run = False
 
-def check_site(driver:webdriver.Edge,wait:WebDriverWait,url):
 
+def check_site(driver: webdriver.Edge, wait: WebDriverWait, url):
     match = re.search(r"https://acm\.ecnu\.edu\.cn/problem/(\d+)/", url)
     if match:
         num = match.group(1)
         print(f"Extracted num: {num}")
-    
+
     if EC.title_contains(num):
         return True
     else:
@@ -76,7 +84,8 @@ def check_site(driver:webdriver.Edge,wait:WebDriverWait,url):
     # title形式如 Problem #5735 - ECNU Online Judge
     # 没做完,似乎不是很需要
 
-def try_to_find_site(driver:webdriver.Edge,wait:WebDriverWait,url):
+
+def try_to_find_site(driver: webdriver.Edge, wait: WebDriverWait, url):
     # 执行完成后跳转到最新页面
     found = False
     # 检查是否已经有过页面
@@ -86,17 +95,18 @@ def try_to_find_site(driver:webdriver.Edge,wait:WebDriverWait,url):
         # 检查URL是否与你想要的相等
         if url in driver.current_url:
             found = True
-            print('found that site')
+            print("found that site")
             break
 
     # 如果没有找到，创建新的页面
     if not found:
-        print('failed to find that site, open a new one')
+        print("failed to find that site, open a new one")
         driver.execute_script("window.open('" + url + "');")
         # 切换到新的页面
         driver.switch_to.window(driver.window_handles[-1])
 
-def open_a_new_tab(driver:webdriver.Edge,url):
+
+def open_a_new_tab(driver: webdriver.Edge, url):
     # 如果已经是目标页面,则不打开新标签页
     if not driver.current_url == url:
         driver.close()
@@ -104,5 +114,3 @@ def open_a_new_tab(driver:webdriver.Edge,url):
         driver.switch_to.window(driver.window_handles[-1])
         driver.execute_script("window.open('" + url + "');")
         driver.switch_to.window(driver.window_handles[-1])
-
-
