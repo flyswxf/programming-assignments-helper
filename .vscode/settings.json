@@ -1,5 +1,9 @@
 {
   "[python]": {
     "editor.defaultFormatter": null
+  },
+  "files.associations": {
+    "algorithm": "cpp",
+    "xutility": "cpp"
   }
 }
