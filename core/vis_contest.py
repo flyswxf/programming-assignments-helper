@@ -11,7 +11,8 @@ from tools.txt_process import make_query
 import sys
 
 
-def visit(url, driver, wait):
+def visit(url, driver, wait, opt):
+    # 检查是否已经打开过该网页
     try_to_find_site(driver, wait, url)
 
     info_or_limited = wait.until(
@@ -33,6 +34,6 @@ def visit(url, driver, wait):
     # examples = driver.find_elements(By.CLASS_NAME, "example")
 
     # 创建或打开result.txt文件，并写入文本
-    make_query(url, driver, wait, paragraphs)
+    make_query(url, paragraphs, opt)
     # driver.quit()
     return True

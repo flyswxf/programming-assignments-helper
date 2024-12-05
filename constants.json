@@ -1,0 +1,14 @@
+{
+    "TASK_BASE_URL": "https://acm.ecnu.edu.cn/problem/",
+    "AI_URL": "https://tongyi.aliyun.com/qianwen/", 
+    "QUERY_FILE_PATH": "log/queries.txt",
+    "CURRENT_QUERIES_FILE_PATH": "log/current_queries.txt",
+    "RESULT_FILE_PATH": "log/results.txt",
+    "SUBMIT_FILE_PATH": "log/submitted.txt",
+    "RETRY_TIME": 3, 
+    "STATUS_ACCEPTED": "Accepted",
+    "STATUS_WRONG_ANSWER": "Wrong answer",
+    "STATUS_RUNTIME_ERROR": "Runtime error",
+    "STATUS_COMPILATION_ERROR": "Compilation error",
+    "STATUS_TIME_LIMIT_EXCEEDED": "Time limit exceeded"
+}
