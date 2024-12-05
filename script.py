@@ -20,15 +20,18 @@ from tools.txt_process import (
     show_accuracy,
 )
 from tools.time_tracker import Time_tracker
+from core.WebAutomation import WebAutomation, Window_handler
 
 import argparse
 import subprocess
 
 # 创建解析器
 parser = argparse.ArgumentParser()
-parser.add_argument("--mode", default="run", help="Mode to run the script. run or test")
 parser.add_argument(
-    "--step", default="submit", help="Step to run. visit, query or submit."
+    "--mode", default="classtest", help="Mode to run the script. run, test or classtest"
+)
+parser.add_argument(
+    "--step", default="visit", help="Step to run. visit, query or submit."
 )
 parser.add_argument(
     "--cmd", default="auto", help="whether to run cmd in python. auto or manual"
@@ -66,7 +69,8 @@ edge_options.add_experimental_option("debuggerAddress", "localhost:9222")
 # 网络参数
 driver = webdriver.Edge(
     service=Service(
-        "D://HuaweiMoveData//Users//fengl//Desktop//code//web_spider//driver//msedgedriver.exe"
+        "./driver/msedgedriver.exe"
+        # "D://HuaweiMoveData//Users//fengl//Desktop//code//web_spider//driver//msedgedriver.exe"
     ),
     options=edge_options,
 )
@@ -145,12 +149,31 @@ elif mode == "test":
     print("url = " + url)
 
     if step == "visit":
+        clear_file("log/query.txt")
         print("visit contest")
-        visit(url, driver, wait)
+        visit(url, driver, wait, "w")
         # 仅作测试用,显示query内容
         with open("log/query.txt", "r", encoding="utf-8") as f:
             query = f.read().strip()
             print(query)
+        driver.quit()
+
+    elif step == "multiVisit":
+        clear_file("log/query.txt")
+        print("multivisit contest")
+        for _ in range(15):
+            url = "https://acm.ecnu.edu.cn/problem/" + task_test_index + "/"
+            visit(url, driver, wait, "a")
+
+            # 多次访问后关闭一些窗口直到只剩一个
+            if _ % 5 == 0:
+                while len(driver.window_handles) > 1:
+                    driver.switch_to.window(driver.window_handles[0])
+                    driver.close()
+                driver.switch_to.window(driver.window_handles[0])
+
+            task_test_index = str(int(task_test_index) + 1)
+        # 需要手动打开文本查看query内容
         driver.quit()
 
     elif step == "query":
@@ -176,6 +199,13 @@ elif mode == "test":
 
     else:
         print("no step named " + step)
+
+elif mode == "classtest":
+    window_handler = Window_handler(driver, wait, longwait)
+    WebAuto = WebAutomation(window_handler)
+    if step == "visit":
+        WebAuto.visit(task_start_index=17, task_end_index=30)
+
 
 else:
     print("no mode named " + mode)
